@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动化测试报告</title>
+    <base target="_blank">
+
+    <!--css 样式-->
+    <style type="text/css">
+        *{ margin: 0;padding: 0;}
+        body {margin-left: 20px;margin-right: 20px;background-color:#FFFFFF;
+            font-family:sans-serif;
+            font-size: 13px;color: #676a6c;overflow-x: hidden; }
+        /* div part_1 */
+        .my-head {background-color: #1ab394; height: 100px; }
+        .head-report{color: #fff;font-size: 30px;font-weight: 700;text-align: center;padding-top: 30px;}
+        /* div part_2 */
+        .my-content-sum{height: 120px;margin-top:40px;border-color: #e7eaec;border-style: solid solid none;border-width: 3px 0; }
+        .my-content-sum-title{border-color: #e7eaec;border-style: solid solid none;border-width: 1px 0; }
+        /* div part_3 */
+        .my-content-title{padding: 6px;}
+        .my-table{width: 100%;max-width: 100%;margin-bottom: 20px;margin-top: 8px;}
+        .my-table  > tr > th, .my-table > tbody > tr > td, .my-table > thead > tr > th {
+            line-height: 1.42857;
+            padding: 8px;
+            vertical-align: middle;
+            border-left: 1px solid #E7E7E7;border-bottom: 1px solid #E7E7E7;
+        }
+        table{border-collapse:collapse;border-spacing:0;  }
+        th,td{padding:0; }
+        th {text-align: left;}
+        .my-table > thead > tr > th {
+            background-color: #F5F5F6;border: 1px solid #E7E7E7;border-bottom: 1px solid #E7E7E7;}
+        .btn-primary {border-radius: 3px; background-color: #1ab394;
+            color: #fff;padding: 1px 5px;font-size: 12px;line-height: 1.5;}
+        .fail {color: brown}
+        .pass {color: green}
+        .error {color: red}
+    </style>
+</head>
+
+<body>
+<div>
+    <!--测试报告-->
+    <div class="my-head">
+        <h1 class="head-report">自动化测试报告</h1>
+    </div>
+
+    <!--报告汇总-->
+    <div class="my-content-sum">
+        <div>
+            <h3 class="my-content-title">报告汇总</h3>
+            <hr class="my-content-sum-title" />
+        </div>
+        <table class="my-table"  style="width: 50%;">
+            <thead>
+            <tr>
+                <th>用例总数</th>
+                <th>用例通过数</th>
+                <th>用例失败数</th>
+                <th>用例错误数</th>
+                <th>用未执行数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td  class="pass">2</td>
+                <td  class="pass">0</td>
+                <td  class="fail">1</td>
+                <td  class="error">1</td>
+                <td  class="skip">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--报告详细-->
+    <div class="my-content-sum">
+        <h3 class="my-content-title">用例详情</h3>
+        <hr class="my-content-sum-title" />
+        <table id="tab-detail" class="my-table">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>测试类</th>
+                <th>执行时间</th>
+                <th>结果</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="detailBody">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!--js 脚本-->
+<script>
+  // 获取后台数据列表
+  var resultData= [{"exec_date":"2020-06-23 14:11:43","exec_rlt":"\u5931\u8D25","tc_name":"test.runner.Runner1Test.testconffile1.1","tempError":["java.lang.ArithmeticException: / by zero","\tat com.report.TestReport.generate_report(TestReport.java:20)","\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)","\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)","\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)","\tat java.lang.reflect.Method.invoke(Method.java:497)","\tat org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:686)","\tat org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)","\tat org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:149)","\tat org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:140)","\tat org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:84)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(ExecutableInvoker.java:115)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker.lambda$invoke$0(ExecutableInvoker.java:105)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:104)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:98)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$6(TestMethodTestDescriptor.java:212)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:208)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:71)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:135)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:125)","\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:135)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:123)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:122)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:80)","\tat java.util.ArrayList.forEach(ArrayList.java:1249)","\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:139)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:125)","\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:135)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:123)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:122)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:80)","\tat java.util.ArrayList.forEach(ArrayList.java:1249)","\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:139)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:125)","\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:135)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:123)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:122)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:80)","\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:32)","\tat org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)","\tat org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:51)","\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:248)","\tat org.junit.platform.launcher.core.DefaultLauncher.lambda$execute$5(DefaultLauncher.java:211)","\tat org.junit.platform.launcher.core.DefaultLauncher.withInterceptedStreams(DefaultLauncher.java:226)","\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:199)","\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:132)","\tat com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:74)","\tat com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)","\tat com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)","\tat com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)"]},{"exec_date":"2012-06-23 14:11:43","exec_rlt":"\u9519\u8BEF","tc_name":"test.runner.Runner1Test.testconffile1.2","tempError":["java.lang.ArithmeticException: / by zero","\tat com.report.TestReport.generate_report(TestReport.java:20)","\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)","\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)","\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)","\tat java.lang.reflect.Method.invoke(Method.java:497)","\tat org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:686)","\tat org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)","\tat org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:149)","\tat org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:140)","\tat org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:84)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(ExecutableInvoker.java:115)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker.lambda$invoke$0(ExecutableInvoker.java:105)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)","\tat org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:104)","\tat org.junit.jupiter.engine.execution.ExecutableInvoker.invoke(ExecutableInvoker.java:98)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$6(TestMethodTestDescriptor.java:212)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:208)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:137)","\tat org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:71)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:135)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:125)","\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:135)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:123)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:122)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:80)","\tat java.util.ArrayList.forEach(ArrayList.java:1249)","\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:139)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:125)","\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:135)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:123)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:122)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:80)","\tat java.util.ArrayList.forEach(ArrayList.java:1249)","\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:38)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$5(NodeTestTask.java:139)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$7(NodeTestTask.java:125)","\tat org.junit.platform.engine.support.hierarchical.Node.around(Node.java:135)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:123)","\tat org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:122)","\tat org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:80)","\tat org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:32)","\tat org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)","\tat org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:51)","\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:248)","\tat org.junit.platform.launcher.core.DefaultLauncher.lambda$execute$5(DefaultLauncher.java:211)","\tat org.junit.platform.launcher.core.DefaultLauncher.withInterceptedStreams(DefaultLauncher.java:226)","\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:199)","\tat org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:132)","\tat com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:74)","\tat com.intellij.rt.execution.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:47)","\tat com.intellij.rt.execution.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:242)","\tat com.intellij.rt.execution.junit.JUnitStarter.main(JUnitStarter.java:70)"]}];
+
+  //页面初始化
+  window.onload = function () {
+      getDetailBodyData();
+  };
+
+  //渲染列表
+  function getDetailBodyData() {
+      var detailBodyNode = document.getElementById("detailBody");
+      var detailBody = "";
+      for (var i = 0; i < resultData.length; i++) {
+          var detailLog = resultData[i].tempError;
+          var openData = "";
+          for (var j = 0; j < detailLog.length; j++) {
+              openData = openData + "<p>" +detailLog[j] + "</p>";
+          }
+          // 执行结果
+          var status = resultData[i].exec_rlt;
+          console.log(status);
+          var statusNode = "";
+          if (status === "通过"){
+              statusNode = "<td class='td4 pass'>通过</td>";
+          } else if(status === "失败"){
+              statusNode = "<td class='td4 fail'>失败</td>";
+          } else if(status === "未执行"){
+              statusNode = "<td class='td4 skip'>未执行</td>";
+          } else{
+              statusNode = "<td class='td4 error'>错误</td>";
+          }
+          var item = JSON.stringify(resultData[i]);
+          detailBody += "<tr><td class='td1'>" + (i+1) + "</td>" +
+              "<td class='td2'>" + resultData[i].tc_name + "</td>" +
+              "<td class='td3'>" + resultData[i].exec_date + "</td>" +
+              statusNode +
+              "<td class='td5'><button class='open-list close btn-primary' onclick='getOpenList(" + item + ",this," + i + ")'>展开</button></td></tr>" +
+              "<tr class='open-data' style='display:none' id='" + i + "'><td colspan='5>" +
+              "<div class='open-data-list'>" +openData+ "</div>" + "</td></tr>";
+      }
+      detailBodyNode.innerHTML = detailBody;
+  }
+
+  //渲染展开后列表
+  function getOpenList(item, dom, index) {
+      var className = dom.getAttribute("class");
+      if (className === "open-list close btn-primary") {
+          dom.setAttribute("class", "open-list open");
+          dom.innerText = "关闭";
+          document.getElementById(index).style.cssText = "font-family: Consolas;font-size:12px";
+      } else {
+          dom.setAttribute("class", "open-list close btn-primary");
+          dom.innerText = "展开";
+          document.getElementById(index).style.cssText = "display:none";
+      }
+  }
+
+</script>
+</body>
+</html>
