@@ -31,12 +31,7 @@ public class ReportUtil {
         /**
          * 对错误信息进行处理
          */
-        entityList.forEach((item)->{
-            if(item != null && item.getErrorinfo().contains("\r\n")){
-                String[] temp = item.getErrorinfo().split("\r\n");
-                item.setTempError(temp);
-            }
-        });
+
 
         // 计算通过等数
         ReportCountVO vo = calcCountVO(entityList);
@@ -123,13 +118,18 @@ public class ReportUtil {
     private static  List<ReportVO> toReportVO(List<ReportEntity> entityList){
         List<ReportVO> vos = new ArrayList<>();
         entityList.forEach(item-> {
+            String[] tempError = {};
             // 过滤成功数据
             if (item != null && (item.getExec_rlt() != StatusEnum.PASS.getName())) {
+                if(item.getErrorinfo().contains("\r\n")){
+                    tempError = item.getErrorinfo().split("\r\n");
+                }
                 ReportVO vo = new ReportVO();
+                // 设置错误日志
+                vo.setTempError(tempError);
                 vo.setExec_date(item.getExec_date());
                 vo.setTc_name(item.getTc_name());
                 vo.setExec_rlt(item.getExec_rlt());
-                vo.setTempError(item.getTempError());
                 vos.add(vo);
             }
         });

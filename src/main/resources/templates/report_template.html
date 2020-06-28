@@ -89,21 +89,7 @@
                 <th>操作</th>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="vo,itemStat:${result_data}">
-                <td th:text="${itemStat.count}" style="width: 10%;"></td>
-                <td th:text="${vo.tc_name}" style="width: 30%;"></td>
-                <td th:text="${vo.exec_date}" style="width: 30%;"></td>
-                <!--<td th:text="${load.exec_rlt}" style="width: 15%;">成功</td>-->
-                <td th:if="${vo.exec_rlt =='成功'}"  class="pass" style="width: 15%;">成功</td>
-                <td th:if="${vo.exec_rlt =='未执行'}"  class="skip" style="width: 15%;">未执行</td>
-                <td th:if="${vo.exec_rlt =='失败'}"   class="fail"  style="width: 15%;">失败</td>
-                <td th:if="${vo.exec_rlt =='错误'}"  class="error"   style="width: 15%;">错误</td>
-                <td style="width: 20%;">
-                    <button id="btn-show-1" class="btn-primary"
-                            type='button' th:onclick="|javascript:my_detail_show('${itemStat.count}','${vo.tempError}')|">展开</button>
-                </td>
-            </tr>
+            <tbody id="detailBody">
             </tbody>
         </table>
     </div>
@@ -112,44 +98,61 @@
 
 <!--js 脚本-->
 <script th:inline="javascript">
+  // 获取后台数据列表
+  var resultData= [[${result_data}]];
 
-  // let resultData= [[${report_result_json_data}]];
+  //页面初始化
+  window.onload = function () {
+      getDetailBodyData();
+  };
 
-  function my_detail_show(rowIndex,errorInfo) {
-    console.log(errorInfo);
-    // 错误信息
-    let detailLog = errorInfo;
-
-    let id = "btn-show-"+rowIndex;
-    let doc = document.getElementById(id);
-    let tb = document.getElementById("tab-detail");
-    if (doc.innerHTML=='展开'){
-      doc.innerHTML="收缩";
-      doc.removeAttribute("btn-primary");
-      addTR(rowIndex,detailLog);
-    } else if (doc.innerHTML=='收缩'){
-      doc.innerHTML="展开";
-      doc.setAttribute("class","btn-primary");
-      let delTr = document.getElementById("add-"+rowIndex);
-      console.log(delTr);
-      delTr.remove();
-    }
+  //渲染列表
+  function getDetailBodyData() {
+      var detailBodyNode = document.getElementById("detailBody");
+      var detailBody = "";
+      for (var i = 0; i < resultData.length; i++) {
+          var detailLog = resultData[i].tempError;
+          var openData = "";
+          for (var j = 0; j < detailLog.length; j++) {
+              openData = openData + "<p>" +detailLog[j] + "</p>";
+          }
+          // 执行结果
+          var status = resultData[i].exec_rlt;
+          console.log(status);
+          var statusNode = "";
+          if (status === "通过"){
+              statusNode = "<td class='td4 pass'>通过</td>";
+          } else if(status === "失败"){
+              statusNode = "<td class='td4 fail'>失败</td>";
+          } else if(status === "未执行"){
+              statusNode = "<td class='td4 skip'>未执行</td>";
+          } else{
+              statusNode = "<td class='td4 error'>错误</td>";
+          }
+          var item = JSON.stringify(resultData[i]);
+          detailBody += "<tr><td class='td1'>" + (i+1) + "</td>" +
+              "<td class='td2'>" + resultData[i].tc_name + "</td>" +
+              "<td class='td3'>" + resultData[i].exec_date + "</td>" +
+              statusNode +
+              "<td class='td5'><button class='open-list close btn-primary' onclick='getOpenList(" + item + ",this," + i + ")'>展开</button></td></tr>" +
+              "<tr class='open-data' style='display:none' id='" + i + "'><td colspan='5>" +
+              "<div class='open-data-list'>" +openData+ "</div>" + "</td></tr>";
+      }
+      detailBodyNode.innerHTML = detailBody;
   }
 
-  function addTR(rowIndex,detailLog){
-    //  "<tr><td colspan='5'><div style='font-family: Consolas;font-size:12px'>" + detailLog + "</div></td></tr>";
-    let tb = document.getElementById("tab-detail");
-    // 插入位置
-    let nodeTr=tb.insertRow(parseInt(rowIndex)+1);
-    nodeTr.setAttribute('id',"add-"+rowIndex)
-    let nodeTd=document.createElement("td");
-    nodeTd.setAttribute('colspan', '5');
-    let nodediv=document.createElement("div");
-    let divText=document.createTextNode(detailLog);
-    nodediv.appendChild(divText);
-    nodediv.setAttribute('style', 'font-family: Consolas;font-size:12px');
-    nodeTr.appendChild(nodeTd);
-    nodeTd.appendChild(nodediv);
+  //渲染展开后列表
+  function getOpenList(item, dom, index) {
+      var className = dom.getAttribute("class");
+      if (className === "open-list close btn-primary") {
+          dom.setAttribute("class", "open-list open");
+          dom.innerText = "关闭";
+          document.getElementById(index).style.cssText = "font-family: Consolas;font-size:12px";
+      } else {
+          dom.setAttribute("class", "open-list close btn-primary");
+          dom.innerText = "展开";
+          document.getElementById(index).style.cssText = "display:none";
+      }
   }
 
 </script>

@@ -26,8 +26,4 @@ public class ReportEntity {
      */
     private String errorinfo="";
 
-    /**
-     * 错误信息切割处理
-     */
-    private String[]  tempError;
 }

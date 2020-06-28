@@ -2,6 +2,8 @@ package com.report.myreport;
 
 import lombok.Data;
 
+import java.util.Arrays;
+
 /**
  * @description  报告展示实体类
  *
@@ -9,7 +11,7 @@ import lombok.Data;
  * @date  2020/6/27
  */
 @Data
-public class ReportVO {
+public class ReportVO{
 
     /**
      * 测试类
@@ -28,6 +30,5 @@ public class ReportVO {
      * 错误信息切割处理
      */
     private String[]  tempError;
-
 
 }
