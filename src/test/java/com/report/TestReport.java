@@ -4,11 +4,11 @@ import com.report.myreport.ReportEntity;
 import com.report.myreport.ReportUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.thymeleaf.util.DateUtils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @SpringBootTest
 public class TestReport {
@@ -21,23 +21,21 @@ public class TestReport {
         }catch (Exception e){
             error = getExceptionToString(e);
         }
-        //System.out.println(error);
         List<ReportEntity> list = new ArrayList<>();
-        ReportEntity entity = new ReportEntity();
-        entity.setExec_date("2020-06-23 14:11:43");
-        entity.setExec_rlt("失败");
-        entity.setErrorinfo(error);
-        entity.setTc_name("test.runner.Runner1Test.testconffile1.1");
 
-        ReportEntity entity1 = new ReportEntity();
-        entity1.setExec_date("2012-06-23 14:11:43");
-        entity1.setExec_rlt("错误");
-        entity1.setErrorinfo(error);
-        entity1.setTc_name("test.runner.Runner1Test.testconffile1.2");
-
-        list.add(entity);
-        list.add(entity1);
-
+        for (int i = 0; i < 15; i++) {
+            ReportEntity entity = new ReportEntity();
+            Date date = new Date();
+            String time = DateUtils.format(date,"yyyy-mm-dd hh:mm:ss", Locale.CHINA);
+            entity.setExec_date(time);
+            Random random = new Random();
+            int n = random.nextInt(5);
+            String[] arr ={"通过","失败","错误","未执行","通过"};
+            entity.setExec_rlt(arr[n]);
+            entity.setErrorinfo(error);
+            entity.setTc_name("test.runner.Runner1Test.report."+i);
+            list.add(entity);
+        }
         ReportUtil.generator(ReportUtil.htmlData(list));
     }
 

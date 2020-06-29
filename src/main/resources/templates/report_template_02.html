@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自动化测试报告</title>
+    <base target="_blank">
+
+    <!--css 样式-->
+    <style type="text/css">
+        *{ margin: 0;padding: 0;}
+        body {margin-left: 20px;margin-right: 20px;background-color:#FFFFFF;
+            font-family:sans-serif;
+            font-size: 13px;color: #676a6c;overflow-x: hidden; }
+        /* div part_1 */
+        .my-head {background-color: #1ab394; height: 100px; }
+        .theme-font { color: #1ab394;}
+        .head-report{color: #FFF;font-size: 30px;font-weight: 700;text-align: center;padding-top: 30px;}
+        /* div part_2 */
+        .my-content-sum{height: 120px;margin-top:40px;border-color: #e7eaec;border-style: solid solid none;border-width: 3px 0; }
+        .my-content-sum-title{border-color: #e7eaec;border-style: solid solid none;border-width: 1px 0; }
+        /* div part_3 */
+        .my-content-title{padding: 6px;}
+        .my-table{width: 100%;max-width: 100%;margin-bottom: 20px;margin-top: 8px;}
+        .my-table  > tr > th, .my-table > tbody > tr > td, .my-table > thead > tr > th {
+            line-height: 1.42857;
+            padding: 8px;
+            vertical-align: middle;
+            border-left: 1px solid #E7E7E7;border-bottom: 1px solid #E7E7E7;
+        }
+        table{border-collapse:collapse;border-spacing:0;  }
+        th,td{padding:0; }
+        th {text-align: left;}
+        .my-table > thead > tr > th {
+            background-color: #F5F5F6;border: 1px solid #E7E7E7;border-bottom: 1px solid #E7E7E7;}
+        .btn-primary {border-radius: 2px; background-color: #1ab394;
+            color: #FFF;padding: 1px 3px;font-size: 12px;line-height: 1.5;}
+        .btn-close {border-radius: 2px; background-color: gray;
+            color: #FFF;padding: 1px 3px;font-size: 12px;line-height: 1.5;}
+        .fail {color: brown}
+        .pass {color: green}
+        .error {color: red}
+    </style>
+</head>
+
+<body>
+<div>
+    <!--测试报告-->
+    <div class="my-head">
+        <h1 class="head-report">自动化测试报告</h1>
+    </div>
+
+    <!--报告汇总-->
+    <div class="my-content-sum">
+        <div>
+            <h3 class="my-content-title">报告汇总</h3>
+            <hr class="my-content-sum-title" />
+        </div>
+        <table class="my-table"  style="width: 50%;">
+            <thead>
+            <tr>
+                <th>用例总数</th>
+                <th>用例通过数</th>
+                <th>用例失败数</th>
+                <th>用例错误数</th>
+                <th>用未执行数</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td  class="pass" th:text="${count_data.total}">0</td>
+                <td  class="pass" th:text="${count_data.pass}">0</td>
+                <td  class="fail" th:text="${count_data.fail}">0</td>
+                <td  class="error" th:text="${count_data.error}">0</td>
+                <td  class="skip" th:text="${count_data.skip}">0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--报告详细-->
+    <div class="my-content-sum">
+        <h3 class="my-content-title">用例详情</h3>
+        <hr class="my-content-sum-title" />
+        <div class="input-group panel-heading" style="width: 100%; height: 50px; background-color: #1ab394; margin-bottom: 10px; text-align: left; font-family: Consolas;">
+            <div style="padding: 15px;">
+                <label style="color: snow">测试类:</label>
+                <select class="chosen-select form-control" data-placeholder="----------" style="width: 300px;" name="filterClass" id="filterClass">
+                    <option value="">----------</option>
+                </select>
+                <label style="color: snow">结果:</label>
+                <select class="chosen-select form-control" data-placeholder="----------" style="width: 300px;" name="filterResult" id="filterResult">
+                    <option value="">----------</option>
+                </select>
+                <div style="float: right; margin-right: 20px;background-color: #FFFFFF;">
+                    <label class="form-control">
+                        <span class="text-navy theme-font1">用例数: </span><span class="pass" id="filterAll"></span><span> | </span>
+                        <span class="text-danger pass1">成功数: </span><span class="text-danger pass" id="filterOk"></span><span> | </span>
+                        <span class="error1">错误数: </span><span class="text-danger error" id="filterError"></span><span> | </span>
+                        <span class="text-danger fail1">失败数: </span><span class="text-danger fail" id="filterFail"></span><span> | </span>
+                        <span class="text-warning">未执行数: </span><span class="text-warning skip" id="filterSkip"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <table id="tab-detail" class="my-table">
+            <thead>
+            <tr>
+                <th>编号</th>
+                <th>测试类</th>
+                <th>执行时间</th>
+                <th>结果</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="detailBody">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!--js 脚本-->
+<script th:inline="javascript">
+  // 获取后台数据列表
+  var resultData= [[${result_data}]];
+
+  //页面初始化
+  window.onload = function () {
+      // 汇总计算及过滤搜索
+      calcReportData();
+      // 详细列表展示
+      getDetailBodyData(resultData);
+  };
+
+  //渲染列表
+  function getDetailBodyData(data) {
+      let _resultData = data;
+      var detailBodyNode = document.getElementById("detailBody");
+      var detailBody = "";
+      for (var i = 0; i < _resultData.length; i++) {
+          var detailLog = _resultData[i].tempError;
+          var openData = "";
+          for (var j = 0; j < detailLog.length; j++) {
+              openData = openData + "<p>" +detailLog[j] + "</p>";
+          }
+          // 执行结果
+          var status = _resultData[i].exec_rlt;
+          var statusNode = "";
+          if (status === "通过"){
+              statusNode = "<td class='td4 pass'>通过</td>";
+          } else if(status === "失败"){
+              statusNode = "<td class='td4 fail'>失败</td>";
+          } else if(status === "未执行"){
+              statusNode = "<td class='td4 skip'>未执行</td>";
+          } else if(status === "错误"){
+              statusNode = "<td class='td4 error'>错误</td>";
+          }
+          var item = JSON.stringify(_resultData[i]);
+          detailBody += "<tr><td class='td1'>" + (i+1) + "</td>" +
+              "<td class='td2'>" + _resultData[i].tc_name + "</td>" +
+              "<td class='td3'>" + _resultData[i].exec_date + "</td>" +
+              statusNode +
+              "<td class='td5'><button class='open-list close btn-primary' onclick='getOpenList(" + item + ",this," + i + ")'>展开</button></td></tr>" +
+              "<tr class='open-data' style='display:none' id='" + i + "'><td colspan='5>" +
+              "<div class='open-data-list'>" +openData+ "</div>" + "</td></tr>";
+      }
+      detailBodyNode.innerHTML = detailBody;
+  }
+
+  //渲染展开后列表
+  function getOpenList(item, dom, index) {
+      var className = dom.getAttribute("class");
+      if (className === "open-list close btn-primary") {
+          dom.setAttribute("class", "open-list open");
+          dom.setAttribute("class","btn-close");
+          dom.innerText = "关闭";
+          document.getElementById(index).style.cssText = "font-family: Consolas;font-size:12px";
+      } else {
+          dom.setAttribute("class", "open-list close btn-primary");
+          dom.innerText = "展开";
+          document.getElementById(index).style.cssText = "display:none";
+      }
+  }
+
+  // 计算和过滤
+  function calcReportData() {
+      var classNames = [];
+      var results = [];
+      results.push("错误");
+      // 拷贝副本
+      let _resultData = resultData;
+      _resultData.forEach((item)=>{
+          classNames.push(item.tc_name);
+  });
+      classNames= unique(classNames);
+      _resultData.forEach((item)=>{
+          results.push(item.exec_rlt);
+  });
+      results = unique(results);
+      // console.log(results);
+      // 拼接过滤项
+      var classDom = document.getElementById("filterClass");
+      var resultDom = document.getElementById("filterResult");
+      createOption(classDom,classNames);
+      createOption(resultDom,results);
+      // 计算结果
+      generateResult("", "");
+      // 搜索 事件调用不加括号
+      classDom.onchange = classChange;
+      resultDom.onchange = resultChange;
+  }
+
+  // 测试类改变事件
+  function classChange(e){
+      var selectDom1 = document.getElementById("filterResult");
+      var index = selectDom1.options.selectedIndex;
+      var resultName = selectDom1.options[index].value;
+      var className = e.target.value;
+      // console.log(className+"============"+resultName)
+      generateResult(className, resultName);
+  }
+
+  // 结果改变事件
+  function resultChange(e){
+      var selectDom = document.getElementById("filterClass");
+      var index = selectDom.options.selectedIndex;
+      var className = selectDom.options[index].value;
+      var resultName = e.target.value;
+      // console.log(className+"============"+resultName)
+      generateResult(className, resultName);
+  }
+
+  /**
+   * 测试类和测试结果
+   */
+  function generateResult(className, caseResult) {
+      var filterAll = 0;
+      var filterOk = 0;
+      var filterError = 0;
+      var filterFail = 0;
+      var filterSkip = 0;
+      let _resultData = resultData;
+      // 过滤数据
+      if (className != ""|| caseResult != ""){
+          console.log(className,caseResult)
+          var filterDatam = [];
+          if (className != ""){
+              filterData =_resultData.filter((item,index)=>{
+                  return className === item.tc_name;
+          });
+              _resultData = filterData;
+          }
+          console.log(_resultData);
+          if (caseResult != ""){
+              filterData =_resultData.filter((item,index)=>{
+                  return caseResult === item.exec_rlt;
+          });
+              _resultData = filterData;
+          }
+      }
+
+      _resultData.forEach((item,index)=>{
+          // console.log(item.tc_name);
+          if ((className == "" || item.tc_name == className) && (caseResult == "" || item.exec_rlt == caseResult)) {
+          filterAll += 1;
+          if (item.exec_rlt == '通过') {
+              filterOk += 1;
+          } else if (item.exec_rlt == '失败') {
+              filterFail += 1;
+          } else if (item.exec_rlt == '错误') {
+              filterError += 1;
+          } else if (item.exec_rlt == '未执行') {
+              filterSkip += 1;
+          }
+         }
+      });
+      // 刷新详细
+      getDetailBodyData(_resultData);
+      document.getElementById("filterAll").innerHTML=filterAll;
+      document.getElementById("filterOk").innerHTML=filterOk;
+      document.getElementById("filterError").innerHTML=filterError;
+      document.getElementById("filterFail").innerHTML=filterFail;
+      document.getElementById("filterSkip").innerHTML=filterSkip;
+  }
+
+  // 动态生成option节点
+  function createOption(_select,arr){
+      for ( i = 0; i < arr.length; i++){
+          var _option = document.createElement("option");
+          _option.value = arr[i];
+          _option.text = arr[i];
+          _select.appendChild(_option);
+      }
+      // console.log(_select);
+      return _select;
+  }
+
+  // 去重
+  function unique(arr){
+      var x = new Set(arr);
+      return [...x];
+  }
+
+</script>
+</body>
+</html>

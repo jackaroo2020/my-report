@@ -31,13 +31,8 @@ public class ReportUtil {
         /**
          * 对错误信息进行处理
          */
-
-
         // 计算通过等数
         ReportCountVO vo = calcCountVO(entityList);
-
-        //String json = JSON.toJSONString(vos);
-        //data.put(Constants.REPORT_RESULT_JSON_DATA,json);
 
         // 实体转换VO
         List<ReportVO> vos = toReportVO(entityList);
@@ -54,13 +49,11 @@ public class ReportUtil {
     public static void generator(Map<String, Object> data) {
         // 设置返回html模版的数据
         Context context = new Context();
-        //context.setVariable(Constants.REPORT_RESULT_JSON_DATA, data.get(Constants.REPORT_RESULT_JSON_DATA));
-
         context.setVariable(Constants.REPORT_RESULT_DATA, data.get(Constants.REPORT_RESULT_DATA));
         context.setVariable(Constants.REPORT_COUNT_DATA, data.get(Constants.REPORT_COUNT_DATA));
         // 生成报告
         try {
-            genReport(context,"report_template","report_result.html");
+            genReport(context,"report_template_02","report_result_02.html");
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -120,7 +113,7 @@ public class ReportUtil {
         entityList.forEach(item-> {
             String[] tempError = {};
             // 过滤成功数据
-            if (item != null && (item.getExec_rlt() != StatusEnum.PASS.getName())) {
+            //if (item != null && (item.getExec_rlt() != StatusEnum.PASS.getName())) {
                 if(item.getErrorinfo().contains("\r\n")){
                     tempError = item.getErrorinfo().split("\r\n");
                 }
@@ -131,7 +124,7 @@ public class ReportUtil {
                 vo.setTc_name(item.getTc_name());
                 vo.setExec_rlt(item.getExec_rlt());
                 vos.add(vo);
-            }
+            //}
         });
         return vos;
     }
