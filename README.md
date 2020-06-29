@@ -14,4 +14,4 @@
 ![report_show3](images/report_show3.png)
 
 ### 支持
-该项目是个人基于Airtest搭建的模块框架，如果你发现了新的 bug请新建一个 issue，欢迎指正。如果对你有帮助，给个 star 哟👏👏
+该项目是个人基于Thymleaf模版引擎生成自动化报告模版演示项目，如果你发现了新的 bug请新建一个 issue，欢迎指正。如果对你有帮助，给个 star 哟👏👏
